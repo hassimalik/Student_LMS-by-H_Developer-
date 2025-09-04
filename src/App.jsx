@@ -11,7 +11,7 @@ import NavbarBL from './components/NavbarBL'
 import NavbarAL from './components/NavbarAL'
 import ContactSection from './components/ContactSection';
 import Profile from './pages/Profile';
-import Courses from './pages/courses';
+import Courses from './pages/Courses';
 
 
 function App() {

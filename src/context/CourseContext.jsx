@@ -6,10 +6,11 @@ export function CourseContextProvider({ children }) {
     const [courses, setCourses] = useState(null);
 
     const addCourse = (newCourse) => {
-        setCourses((prev) => [prev, ...newCourse]);
-    }
-    const removeCourse=(id)=>{
-        setCourses((prev)=>prev.filter((c)=>c.id !==id));
+        setCourses((prev) => (prev ? [newCourse, ...prev] : [newCourse]));
+    };
+
+    const removeCourse = (id) => {
+        setCourses((prev) => prev.filter((c) => c.id !== id));
     }
 
     const updateCourse = (id, updatedData) => {
@@ -18,7 +19,7 @@ export function CourseContextProvider({ children }) {
         );
     };
     return (
-        <CourseContext.Provider value={{ courses, setCourses , addCourse , updateCourse , removeCourse }}>
+        <CourseContext.Provider value={{ courses, setCourses, addCourse, updateCourse, removeCourse }}>
             {children}
         </CourseContext.Provider>
     )
