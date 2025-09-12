@@ -9,9 +9,9 @@ function ContactSection() {
             className="relative py-20 flex -mt-15 flex-col gap-3 bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white"
         >
 
-            <button className="p-2 px-1 w-[9%] ml-12  bg-[#0b4f53] text-white rounded-lg cursor-pointer transition-ease duration-400 hover:scale-110">
+            <button className=" px-1 w-[5%] ml-12 bg-transparent outline-1 outline-gray-800 text-white rounded-lg cursor-pointer transition-ease duration-400 hover:scale-110">
                 <Link to="/dashboardbl">
-                    Dashboard
+                    🡸
                 </Link>
             </button>
 

@@ -1,7 +1,7 @@
 // src/components/TestimonialsSection.jsx
 import React from "react";
 
-function TestimonialsSection() {
+function Testimonials() {
     const testimonials = [
         {
             name: "Ali Raza",
@@ -28,22 +28,24 @@ function TestimonialsSection() {
 
     return (
         <section
-            
-            className="relative py-20 bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white"
+            id="testimonials"
+            className="relative py-20  text-white"  style={{
+        background: "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(99, 102, 241, 0.25), transparent 70%), #000000",
+      }}
         >
-            <div id="testimonials" className="max-w-6xl mx-auto px-6 text-center">
-                <h2 className="text-4xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-pink-400 to-purple-500">
+            <div className="max-w-6xl mx-auto px-6 text-center">
+                <h2 className="t-heading  text-4xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-pink-400 to-purple-500">
                     What Students Say
                 </h2>
-                <p className="text-gray-400 mb-12 text-lg">
+                <p className="t-para text-gray-400 mb-12 text-lg">
                     Hear from learners who use our platform daily to grow their skills.
                 </p>
 
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {testimonials.map((t, index) => (
-                        <div
+                        <div 
                             key={index}
-                            className="p-6 rounded-2xl bg-white/10 backdrop-blur-xl shadow-lg border border-white/20 hover:scale-105 transition-transform text-left"
+                            className="t-card p-6 rounded-2xl bg-white/10 backdrop-blur-xl shadow-lg border border-white/20 hover:scale-105 transition-transform text-left"
                         >
                             <div className="flex items-center gap-4 mb-4">
                                 <img
@@ -65,4 +67,4 @@ function TestimonialsSection() {
     );
 }
 
-export default TestimonialsSection;
+export default Testimonials;

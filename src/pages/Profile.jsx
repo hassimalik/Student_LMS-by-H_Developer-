@@ -1,76 +1,120 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 // src/pages/Profile.jsx
 import { useState } from "react";
-import { FaCamera } from "react-icons/fa";
-import { useUser } from "@clerk/clerk-react";
+import { FaCamera, FaPen } from "react-icons/fa";
+import { Trash2 } from "lucide-react";
+import { Link } from "react-router-dom";
+import { useCourses } from "../context/CourseContext";
+import { useUser } from "../context/UserContext"; // ✅ useUser context
 
 function Profile() {
-  const { isLoaded, isSignedIn, user } = useUser();
+  const defaultAvatar = "https://www.w3schools.com/howto/img_avatar.png";
 
-  // Clerk load checks
-  if (!isLoaded) return <div className="text-white">Loading...</div>;
-  if (!isSignedIn) return <div className="text-white">You must be signed in to view this page.</div>;
+  // Avatar state
+  const [avatar, setAvatar] = useState(defaultAvatar);
 
-  // States
-  const [name, setName] = useState(user.fullName || ""); 
+  const handleAvatarChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setAvatar(URL.createObjectURL(file));
+    }
+  };
+
+  // Name state
   const [editingName, setEditingName] = useState(false);
-  const [tempName, setTempName] = useState(name);
+  const { user, setUser, addSkill, removeSkill } = useUser(); // ✅ context values
+  const [tempName, setTempName] = useState(user.name);
 
-  const [bio, setBio] = useState("Coding is my passion...");
+  // Bio state
   const [editingBio, setEditingBio] = useState(false);
-  const [tempBio, setTempBio] = useState(bio);
+  const [tempBio, setTempBio] = useState(user.bio || "Coding is my passion...");
 
-  const [skills, setSkills] = useState(["React", "Tailwind", "Firebase"]);
+  // Skill input
   const [newSkill, setNewSkill] = useState("");
 
-  // Skill add
-  const addSkill = () => {
-    if (newSkill.trim() && !skills.includes(newSkill)) {
-      setSkills([...skills, newSkill]);
+  const handleAddSkill = () => {
+    const skillName = newSkill.trim();
+    if (
+      skillName &&
+      !user.skills.some((s) => s.toLowerCase() === skillName.toLowerCase())
+    ) {
+      addSkill(skillName);
       setNewSkill("");
     }
   };
 
-  // Skill remove
-  const removeSkill = (skill) => {
-    setSkills(skills.filter((s) => s !== skill));
+  // Courses
+  const { courses, removeCourse } = useCourses() || {
+    courses: [],
+    removeCourse: () => { },
   };
 
+  const completedCourses = (courses || []).filter((c) => c.completed);
+  const incompletedCourses = (courses || []).filter((c) => !c.completed);
+
   return (
-    <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center p-6">
-      <div className="bg-gray-800 rounded-2xl shadow-xl w-full max-w-5xl flex flex-col md:flex-row p-6 gap-6">
-        
+    <div className="min-h-screen flex flex-col text-white items-center inset-0 justify-center p-6" style={{
+      background: "radial-gradient(125% 125% at 50% 10%, #000000 40%, #010133 100%)",
+    }}>
+      {/* Back button */}
+      <Link to="/dashboard">
+        <button className="px-3 hover:scale-110 transition-ease duration-200 py-2 absolute top-13 fill-[#39ebf1] right-7 bg-[#14688a7c]  rounded-lg ">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="40"
+            height="20"
+            viewBox="0 0 50 50"
+          >
+            <path d="M25 1.05c-.22 0-.43.07-.62.21L1.38 19.21c-.43.34-.51.97-.17 1.41.34.43.97.51 1.41.17L4 19.71V46c0 .55.45 1 1 1h14V29h12v18h14c.55 0 1-.45 1-1V19.71l1.38.79c.19.14.4.21.62.21.3 0 .59-.13.79-.39.34-.44.26-1.07-.17-1.41L25.62 1.26c-.19-.14-.41-.21-.62-.21zM35 5v1.05l6 4.68V5h-6z"></path>
+          </svg>
+        </button>
+      </Link>
+
+      <div className="rounded-2xl shadow-xl w-full max-w-6xl flex flex-col md:flex-row p-6 gap-6 relative" style={{
+        backgroundColor: '#0a0a0a',
+        backgroundImage: `
+       radial-gradient(circle at 25% 25%, #222222 0.5px, transparent 1px),
+       radial-gradient(circle at 75% 75%, #111111 0.5px, transparent 1px)
+     `,
+        backgroundSize: '10px 10px',
+        imageRendering: 'pixelated',
+      }}>
         {/* Left Section */}
         <div className="md:w-1/3 flex flex-col items-center">
           {/* Avatar */}
           <div className="relative">
             <img
-              src={user.imageUrl || "https://via.placeholder.com/150"}
+              src={avatar}
               alt="Profile"
               className="w-32 h-32 rounded-full object-cover border-4 border-gray-700"
             />
-            <div
-              className="absolute bottom-2 right-2 bg-gray-700 p-2 rounded-full cursor-not-allowed"
-              title="Avatar set by Clerk"
+            <label
+              htmlFor="avatar-upload"
+              className="absolute bottom-2 right-2 bg-gray-700 p-2 rounded-full hover:bg-gray-600"
             >
               <FaCamera />
-            </div>
+              <input
+                type="file"
+                id="avatar-upload"
+                accept="image/*"
+                className="hidden"
+                onChange={handleAvatarChange}
+              />
+            </label>
           </div>
 
-          {/* Name + Username */}
-          <div className="mt-4 text-center">
+          {/* Name */}
+          <div className="mt-4 text-center" >
             {editingName ? (
               <div>
                 <input
                   value={tempName}
                   onChange={(e) => setTempName(e.target.value)}
                   className="px-2 py-1 rounded bg-gray-700 border border-gray-600 text-white"
-                  title="Edit name"
                 />
                 <div className="mt-2 flex justify-center gap-2">
                   <button
                     onClick={() => {
-                      setName(tempName);
+                      setUser((prev) => ({ ...prev, name: tempName }));
                       setEditingName(false);
                     }}
                     className="px-2 py-1 bg-green-600 rounded hover:bg-green-500"
@@ -79,7 +123,7 @@ function Profile() {
                   </button>
                   <button
                     onClick={() => {
-                      setTempName(name);
+                      setTempName(user.name);
                       setEditingName(false);
                     }}
                     className="px-2 py-1 bg-red-600 rounded hover:bg-red-500"
@@ -89,15 +133,14 @@ function Profile() {
                 </div>
               </div>
             ) : (
-              <h2
-                className="text-xl font-bold cursor-pointer hover:underline"
-                onClick={() => setEditingName(true)}
-                title="Click to edit name"
-              >
-                {name}
+              <h2 className="text-xl font-bold flex items-center gap-2 justify-center">
+                {user.name}
+                <FaPen
+                  className="text-sm  hover:text-blue-400"
+                  onClick={() => setEditingName(true)}
+                />
               </h2>
             )}
-            <p className="text-gray-400 text-sm">@{user.username}</p>
           </div>
 
           {/* Bio */}
@@ -110,12 +153,11 @@ function Profile() {
                   onChange={(e) => setTempBio(e.target.value)}
                   maxLength={150}
                   className="w-full p-2 rounded bg-gray-700 border border-gray-600 text-white"
-                  title="Edit bio"
                 />
                 <div className="mt-2 flex justify-end gap-2">
                   <button
                     onClick={() => {
-                      setBio(tempBio);
+                      setUser((prev) => ({ ...prev, bio: tempBio }));
                       setEditingBio(false);
                     }}
                     className="px-2 py-1 bg-green-600 rounded hover:bg-green-500"
@@ -124,7 +166,7 @@ function Profile() {
                   </button>
                   <button
                     onClick={() => {
-                      setTempBio(bio);
+                      setTempBio(user.bio || "Coding is my passion...");
                       setEditingBio(false);
                     }}
                     className="px-2 py-1 bg-red-600 rounded hover:bg-red-500"
@@ -138,11 +180,11 @@ function Profile() {
               </div>
             ) : (
               <p
-                className="text-gray-300 cursor-pointer hover:underline"
+                className="text-gray-300  hover:underline flex justify-between items-center"
                 onClick={() => setEditingBio(true)}
-                title="Click to edit bio"
               >
-                {bio}
+                {user.bio || "Coding is my passion..."}
+                <FaPen className="text-sm ml-2 hover:text-blue-400" />
               </p>
             )}
           </div>
@@ -151,17 +193,15 @@ function Profile() {
           <div className="mt-6 w-full">
             <h3 className="font-semibold mb-2">Skills</h3>
             <div className="flex flex-wrap gap-2">
-              {skills.map((skill, idx) => (
+              {user.skills.map((skill, idx) => (
                 <span
                   key={idx}
                   className="bg-blue-600 px-3 py-1 rounded-full text-sm flex items-center gap-2"
-                  title={skill}
                 >
                   {skill}
                   <button
                     onClick={() => removeSkill(skill)}
                     className="ml-1 text-red-400 hover:text-red-200"
-                    title="Remove skill"
                   >
                     ✕
                   </button>
@@ -173,11 +213,10 @@ function Profile() {
                 value={newSkill}
                 onChange={(e) => setNewSkill(e.target.value)}
                 placeholder="Add skill..."
-                className="flex-1 px-2 py-1 rounded bg-gray-700 border border-gray-600 text-white"
-                title="Add new skill"
+                className="flex-1 px-2 py-1 rounded bg-transparent  outline-1 outline-gray-900 text-white"
               />
               <button
-                onClick={addSkill}
+                onClick={handleAddSkill}
                 className="px-3 py-1 bg-blue-600 rounded hover:bg-blue-500"
               >
                 Add
@@ -187,11 +226,84 @@ function Profile() {
         </div>
 
         {/* Right Section */}
-        <div className="md:w-2/3 bg-gray-700 rounded-xl p-6">
-          <h3 className="font-bold text-lg mb-4">My Courses / Badges</h3>
-          <p className="text-gray-300">
-            (Yahan tum apne courses aur badges fetch/display karoge.)
-          </p>
+        <div className="md:w-2/3 rounded-xl p-6" style={{
+     backgroundColor: '#0a0a0a',
+     backgroundImage: `
+       radial-gradient(circle at 25% 25%, #222222 0.5px, transparent 1px),
+       radial-gradient(circle at 75% 75%, #111111 0.5px, transparent 1px)
+     `,
+     backgroundSize: '10px 10px',
+     imageRendering: 'pixelated',
+   }}>
+          <h3 className="font-bold text-lg mb-4">My Courses</h3>
+
+          {/* In Progress */}
+          <h4 className="font-semibold mb-2">In Progress</h4>
+          {incompletedCourses.length > 0 ? (
+            incompletedCourses.map((course) => (
+              <div
+                key={course.id}
+                className="flex items-center bg-gray-800 p-3 rounded-lg mb-2 gap-3"
+              >
+                {course.thumbnail && (
+                  <img
+                    src={course.thumbnail}
+                    alt={course.name}
+                    className="w-16 h-12 object-cover rounded"
+                  />
+                )}
+                <div className="flex-1">
+                  <p className="font-bold">{course.name}</p>
+                  <p className="text-sm text-gray-400 line-clamp-1">
+                    {course.description}
+                  </p>
+                  <div className="w-full bg-gray-600 rounded-full h-2 mt-1">
+                    <div
+                      className="bg-blue-500 h-2 rounded-full"
+                      style={{ width: `${course.progress || 0}%` }}
+                    />
+                  </div>
+                </div>
+                <Trash2
+                  className="text-red-400 "
+                  onClick={() => removeCourse(course.id)}
+                />
+              </div>
+            ))
+          ) : (
+            <p className="text-gray-400">No courses in progress.</p>
+          )}
+
+          {/* Completed */}
+          <h4 className="font-semibold mt-6 mb-2">Completed</h4>
+          {completedCourses.length > 0 ? (
+            completedCourses.map((course) => (
+              <div
+                key={course.id}
+                className="flex items-center bg-gray-800 p-3 rounded-lg mb-2 gap-3"
+              >
+                {course.thumbnail && (
+                  <img
+                    src={course.thumbnail}
+                    alt={course.name}
+                    className="w-16 h-12 object-cover rounded"
+                  />
+                )}
+                <div className="flex-1">
+                  <p className="font-bold">{course.name}</p>
+                  <p className="text-sm text-gray-400 line-clamp-1">
+                    {course.description}
+                  </p>
+                </div>
+                <Trash2
+                  className="text-red-400 "
+                  onClick={() => removeCourse(course.id)}
+                />
+              </div>
+            ))
+          ) : (
+            <p className="text-gray-400">No completed courses.</p>
+          )}
         </div>
       </div>
     </div>

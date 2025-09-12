@@ -1,7 +1,16 @@
 import confetti from "canvas-confetti";
 
-export function runCelebration(duration = 5000) {
+export function runCelebration(duration = 10000, setShowMessage, audioRef) {
     const end = Date.now() + duration;
+
+    // Show congratulation message
+    setShowMessage(true);
+
+    // Play audio
+    if (audioRef.current) {
+        audioRef.current.currentTime = 0;
+        audioRef.current.play();
+    }
 
     (function frame() {
         confetti({
@@ -21,4 +30,13 @@ export function runCelebration(duration = 5000) {
             requestAnimationFrame(frame);
         }
     })();
+
+    // stop after duration
+    setTimeout(() => {
+        setShowMessage(false);
+        if (audioRef.current) {
+            audioRef.current.pause();
+            audioRef.current.currentTime = 0;
+        }
+    }, duration);
 }

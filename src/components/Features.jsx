@@ -1,11 +1,11 @@
-// src/components/FeaturesSection.jsx
+// src/components/Features.jsx
 import React from "react";
 import { BookOpen, Trophy, UserCheck, Layers } from "lucide-react"; // lucide-react se icons
 import CourseImg from '../assets/course-management.png'
 import Star from '../assets/star.png'
 import Graduate from '../assets/Graduate.png'
 import DB from '../assets/Dashboard.png'
-function FeaturesSection() {
+function Features() {
     const features = [
         {
             title: "Easy Course Management",
@@ -34,12 +34,14 @@ function FeaturesSection() {
     ];
 
     return (
-        <section id="features" className="relative py-20 bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white">
+        <section id="features" className="relative py-20  text-white" style={{
+      background: "radial-gradient(125% 125% at 50% 10%, #000000 40%, #010133 100%)",
+    }}>
             <div className="max-w-6xl mx-auto px-6 text-center">
-                <h2 className="text-4xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500">
+                <h2 className="f-heading  text-4xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500">
                     Why Choose Our LMS?
                 </h2>
-                <p className="text-gray-400 mb-12 text-lg">
+                <p className="f-text text-gray-400 mb-12 text-lg">
                     A student-first platform designed to help you grow your skills in a structured way.
                 </p>
 
@@ -47,9 +49,9 @@ function FeaturesSection() {
                     {features.map((feature, index) => (
                         <div
                             key={index}
-                            className="p-6 rounded-2xl bg-white/10 backdrop-blur-xl shadow-lg border border-white/20 hover:scale-105 transition-transform"
+                            className="f-card p-6 rounded-2xl bg-white/10 backdrop-blur-xl shadow-lg border border-white/20 hover:scale-105 transition-transform"
                         >
-                            <div className="flex flex-col items-center">
+                            <div className=" flex flex-col items-center">
                                 <img src={feature.img} alt={feature.title} className="w-20 h-20 mb-4" />
                                 {feature.icon}
                                 <h3 className="mt-4 text-xl font-semibold">{feature.title}</h3>
@@ -63,4 +65,4 @@ function FeaturesSection() {
     );
 }
 
-export default FeaturesSection;
+export default Features;

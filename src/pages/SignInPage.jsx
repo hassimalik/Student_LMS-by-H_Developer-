@@ -5,9 +5,9 @@ export default function SignInPage() {
     return (
         <>
         <div className="bg-black">
-            <button className="p-2 px-1 w-[9%] ml-12  bg-[#0b4f53] text-white rounded-lg cursor-pointer transition-ease duration-400 hover:scale-110">
+            <button className="px-1 mt-5 w-[5%] ml-12  bg-transparent outline-1 outline-gray-700 text-white rounded-lg cursor-pointer transition-ease duration-400 hover:scale-110">
                 <Link to="/dashboardbl">
-                    Dashboard
+                    🡸
                 </Link>
             </button></div>
         <div className="flex items-center  justify-center min-h-screen bg-black">
