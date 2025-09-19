@@ -35,21 +35,21 @@ const DashboardBL = () => {
             opacity: 0,
             duration: 1,
             x: -40
-          }, "-=2.5")
+          }, "-=3.5")
         tl1.from(heroPara.current, {
           opacity: 0,
           duration: 1,
           x: -40
-        }, "-=2.5"),
+        }, "-=3.5"),
           tl1.from(heroImg.current, {
             opacity: 0,
             x: 40,
             duration: 1
-          }, "-=2.5")
+          }, "-=3.5")
         tl1.from(".btn", {
           opacity: 0,
           duration: 1
-        }, "-=2")
+        }, "-=3")
       }
       function page2Animation() {
         const tl2 = gsap.timeline({
