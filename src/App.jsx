@@ -15,6 +15,7 @@ const DashboardAL = lazy(()=>import("./pages/DashboardAl"));
 const Courses = lazy(()=>import ("./pages/Courses"));
 const DashboardBL = lazy(()=>import("./pages/DashboardBL"))
 import CustomCursor from './CustomCursor';
+import { Analytics } from "@vercel/analytics/react";
 function App() {
   return (
     <BrowserRouter>
@@ -63,6 +64,7 @@ function App() {
         </Suspense>
         <Footer/>
         <CustomCursor />
+        <Analytics />
     </BrowserRouter>
     
   )
