@@ -27,8 +27,8 @@ This app helps students add YouTube playlists as courses, track their progress v
 ---
 
 ## 🚀 Live Demo & Repo  
-🔗 **Live Demo:** [Your Live Link Here]  
-💻 **GitHub Repo:** [Repo Link Here]  
+🔗 **Live Demo:** https://student-lms-by-h-developer.vercel.app 
+💻 **GitHub Repo:** (https://github.com/hassimalik/hashstore-ecommercepp.git) 
 
 ---
 
