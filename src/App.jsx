@@ -30,10 +30,12 @@ function App() {
                 <SignedOut>
                   <NavbarBL />
                   <DashboardBL />
+                  <Footer/>
                 </SignedOut>
                 <SignedIn>
                   <NavbarAL />
                   <DashboardAL />
+                  <Footer/>
                 </SignedIn>
               </>
             }
@@ -53,6 +55,7 @@ function App() {
                 <SignedIn>
                   <NavbarAL />
                   <DashboardAL />
+                  <Footer/>
                 </SignedIn>
                 <SignedOut>
                   <RedirectToSignIn />
@@ -62,7 +65,6 @@ function App() {
           />
         </Routes>
         </Suspense>
-        <Footer/>
         <CustomCursor />
         <Analytics />
     </BrowserRouter>
